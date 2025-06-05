@@ -5,15 +5,19 @@ from select import select
 from .engine import engine
 from sqlmodel import Session
 
-from ..models import User
 
 
-def get_user(user_id: int) -> User | None:
+from app.models.User import UserData
+
+
+def get_user(user_id: int) -> UserData | None:
     with Session(engine) as session:
-        session.get(User, user_id)
+        session.get(UserData, user_id)
         pass
 
-def get_users() -> Iterable[User]:
+def get_users() -> Iterable[UserData]:
     with Session(engine) as session:
-        statement = select(User)
+        statement = select(UserData)
         return session.exec(statement).all()
+
+
