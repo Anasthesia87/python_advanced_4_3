@@ -1,12 +1,21 @@
-from pydantic import BaseModel, EmailStr, HttpUrl
+# from pydantic import BaseModel, EmailStr, HttpUrl
+from pydantic import BaseModel, EmailStr
+from sqlmodel import Field, SQLModel
+
+# class UserData(BaseModel):
+#     id: int
+#     email: EmailStr
+#     first_name: str
+#     last_name: str
+#     avatar: HttpUrl
 
 
-class UserData(BaseModel):
-    id: int
+class UserData(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
     email: EmailStr
     first_name: str
     last_name: str
-    avatar: HttpUrl
+    avatar: str
 
 
 class UserDataCreateBody(BaseModel):
