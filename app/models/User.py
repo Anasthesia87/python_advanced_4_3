@@ -1,13 +1,6 @@
-# from pydantic import BaseModel, EmailStr, HttpUrl
-from pydantic import BaseModel, EmailStr
-from sqlmodel import Field, SQLModel
 
-# class UserData(BaseModel):
-#     id: int
-#     email: EmailStr
-#     first_name: str
-#     last_name: str
-#     avatar: HttpUrl
+from pydantic import BaseModel, EmailStr, HttpUrl
+from sqlmodel import Field, SQLModel
 
 
 class UserData(SQLModel, table=True):
@@ -16,6 +9,19 @@ class UserData(SQLModel, table=True):
     first_name: str
     last_name: str
     avatar: str
+
+
+class UserCreate(BaseModel):
+    email: EmailStr
+    first_name: str
+    last_name: str
+    avatar: HttpUrl
+
+class UserUpdate(BaseModel):
+    email: EmailStr | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    avatar: HttpUrl | None = None
 
 
 class UserDataCreateBody(BaseModel):

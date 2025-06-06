@@ -1,15 +1,15 @@
 import dotenv
 import pytest
 
-BASE_URL = "http://127.0.0.1:8001"
+BASE_URL = "http://127.0.0.1:8002"
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def envs():
     dotenv.load_dotenv()
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def base_url():
     return BASE_URL
 
