@@ -1,5 +1,11 @@
 import dotenv
 import pytest
+from sqlmodel import Session, select
+from app.database.engine import engine
+import requests
+from app.models.User import UserData
+import json
+from app.database import data
 
 BASE_URL = "http://127.0.0.1:8002"
 
@@ -104,91 +110,3 @@ def test_data_users():
     ]
 
 
-@pytest.fixture
-def test_data_resources():
-    return [
-        {
-            "id": 1,
-            "name": "cerulean",
-            "year": 2000,
-            "color": "#98B2D1",
-            "pantone_value": "15-4020"
-        },
-        {
-            "id": 2,
-            "name": "fuchsia rose",
-            "year": 2001,
-            "color": "#C74375",
-            "pantone_value": "17-2031"
-        },
-        {
-            "id": 3,
-            "name": "true red",
-            "year": 2002,
-            "color": "#BF1932",
-            "pantone_value": "19-1664"
-        },
-        {
-            "id": 4,
-            "name": "aqua sky",
-            "year": 2003,
-            "color": "#7BC4C4",
-            "pantone_value": "14-4811"
-        },
-        {
-            "id": 5,
-            "name": "tigerlily",
-            "year": 2004,
-            "color": "#E2583E",
-            "pantone_value": "17-1456"
-        },
-        {
-            "id": 6,
-            "name": "blue turquoise",
-            "year": 2005,
-            "color": "#53B0AE",
-            "pantone_value": "15-5217"
-        },
-        {
-            "id": 7,
-            "name": "green oasis",
-            "year": 2006,
-            "color": "#3A913F",
-            "pantone_value": "18-5841"
-        },
-        {
-            "id": 8,
-            "name": "purple majesty",
-            "year": 2007,
-            "color": "#5E2B7B",
-            "pantone_value": "19-3642"
-        },
-        {
-            "id": 9,
-            "name": "golden sun",
-            "year": 2008,
-            "color": "#F2C649",
-            "pantone_value": "14-0850"
-        },
-        {
-            "id": 10,
-            "name": "silver mist",
-            "year": 2009,
-            "color": "#C0C0C0",
-            "pantone_value": "11-4300"
-        },
-        {
-            "id": 11,
-            "name": "black pearl",
-            "year": 2010,
-            "color": "#1E1E1E",
-            "pantone_value": "19-4005"
-        },
-        {
-            "id": 12,
-            "name": "white sand",
-            "year": 2011,
-            "color": "#F5F5F5",
-            "pantone_value": "11-0601"
-        }
-    ]

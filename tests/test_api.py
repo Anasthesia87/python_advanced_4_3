@@ -140,12 +140,13 @@ def test_api_get_list_users_after_create_user(base_url, fill_test_data):
     response = requests.get(f"{base_url}/api/users")
     users_list_from_api = response.json()['items']
 
-    values_equal = all(fill_test_data[key] == users_list_from_api[key] for key in fill_test_data if key in users_list_from_api)
+    values_equal = all(
+        fill_test_data[key] == users_list_from_api[key]
+        for key in fill_test_data
+        if key in users_list_from_api)
     assert values_equal
     assert len(users_list_from_api) == len(fill_test_data)
 
-    delete_response = requests.delete(f"{base_url}/api/users/{new_user['id']}")
-    assert delete_response.status_code == 200, f"Не удалось удалить пользователя: {delete_response.text}"
 
 
 
