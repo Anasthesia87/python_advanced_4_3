@@ -2,7 +2,7 @@ from typing import Iterable
 from http import HTTPStatus
 from fastapi import HTTPException, APIRouter
 from app.database import users
-from app.models.User import UserData, UserCreate, UserUpdate
+from app.models.User import UserData, UserDataCreateBody, UserDataUpdateBody
 
 
 from fastapi import APIRouter, Depends
@@ -30,17 +30,9 @@ def get_users(session: Session = Depends(get_session)):
     return users.get_users(session)  # <- session передается явно
 
 
-# @router.get("/api/users")
-# def read_users(session: Session = Depends(get_session)):
-#     return get_users(session)  # <- session передается явно
-# @router.get("/", status_code=HTTPStatus.OK)
-# def get_users() -> Iterable[UserData]:
-#     return users.get_users()
-
-
 @router.post("/", status_code=HTTPStatus.CREATED)
 def create_user(user: UserData) -> UserData:
-    UserCreate.model_validate(user.model_dump())
+    UserDataCreateBody.model_validate(user.model_dump())
     return users.create_user(user)
 
 

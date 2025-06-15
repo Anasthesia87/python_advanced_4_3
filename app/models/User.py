@@ -11,28 +11,17 @@ class UserData(SQLModel, table=True):
     avatar: str
 
 
-class UserCreate(BaseModel):
+class UserDataCreateBody(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
     avatar: HttpUrl
 
-class UserUpdate(BaseModel):
+class UserDataUpdateBody(BaseModel):
     email: EmailStr | None = None
     first_name: str | None = None
     last_name: str | None = None
     avatar: HttpUrl | None = None
-
-
-class UserDataCreateBody(BaseModel):
-    name: str
-    job: str
-
-
-class UserDataUpdateBody(BaseModel):
-    name: str
-    job: str
-
 
 class UserDataCreateResponse(BaseModel):
     name: str
@@ -47,37 +36,6 @@ class UserDataUpdateResponse(BaseModel):
     updatedAt: str
 
 
-class ResourceData(BaseModel):
-    id: int
-    name: str
-    year: int
-    color: str
-    pantone_value: str
 
 
-class SupportData(BaseModel):
-    url: str
-    text: str
 
-
-class ResponseModel(BaseModel):
-    data: UserData
-    support: SupportData
-
-
-class ResponseModelList(BaseModel):
-    page: int
-    per_page: int
-    total: int
-    total_pages: int
-    data: list[UserData]
-    support: SupportData
-
-
-class ResponseModelListResource(BaseModel):
-    page: int
-    per_page: int
-    total: int
-    total_pages: int
-    data: list[ResourceData]
-    support: SupportData

@@ -6,8 +6,15 @@ import requests
 from app.models.User import UserData
 
 def test_service_availability(base_url):
-    response = requests.get(base_url)
+    response = requests.get(f'{base_url}/status')
+    assert response.json()['database']
     assert response.status_code in (HTTPStatus.OK, HTTPStatus.NOT_FOUND)
+
+
+def test_clean_db(base_url):
+    response = requests.get(f"{base_url}/users")
+    assert len(response.json()['items']) == 0
+
 
 @pytest.fixture(scope="module")
 def fill_test_data(base_url):
