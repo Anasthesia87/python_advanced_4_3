@@ -125,7 +125,11 @@ def test_api_get_user_after_create_user(base_url):
     delete_response = requests.delete(f"{base_url}/api/users/{new_user['id']}")
     assert delete_response.status_code == 200, f"Не удалось удалить пользователя: {delete_response.text}"
 
-def test_api_get_list_users_after_create_user(base_url, fill_test_data):
+def test_api_get_list_users_after_create_user(base_url, fill_test_data, clear_database):
+    response = requests.get(f"{base_url}/api/users")
+    assert response.status_code == 200
+    initial_users = response.json()
+
     body = {
         "email": "valid@example.com",
         "first_name": "test_first_name",
@@ -135,17 +139,21 @@ def test_api_get_list_users_after_create_user(base_url, fill_test_data):
     create_response = requests.post(url=f"{base_url}/api/users", json=body)
     assert create_response.status_code == 201, f"Не удалось создать пользователя: {create_response.text}"
     new_user = create_response.json()
-    fill_test_data[new_user['id']] = new_user
 
     response = requests.get(f"{base_url}/api/users")
-    users_list_from_api = response.json()['items']
+    users_list_from_api = response.json()
 
-    values_equal = all(
-        fill_test_data[key] == users_list_from_api[key]
-        for key in fill_test_data
-        if key in users_list_from_api)
+    new_user_found = any(user['id'] == new_user['id'] for user in users_list_from_api)
+    assert new_user_found, "Новый пользователь не найден в списке"
+
+    values_equal = all(fill_test_data[key] == users_list_from_api[key] for key in fill_test_data if key in users_list_from_api)
     assert values_equal
-    assert len(users_list_from_api) == len(fill_test_data)
+    assert len(users_list_from_api) == len(initial_users) + 1
+
+
+
+
+
 
 
 

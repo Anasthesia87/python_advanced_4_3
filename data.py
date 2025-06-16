@@ -1,4 +1,4 @@
-users_dict = {
+users = {
     1: {
         "email": "george.bluth@reqres.in",
         "first_name": "George",
