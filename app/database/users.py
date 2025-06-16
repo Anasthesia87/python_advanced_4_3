@@ -1,10 +1,7 @@
-
-from typing import Iterable, Type
 from fastapi import HTTPException
 from .engine import engine
-from app.models.User import UserData, UserDataUpdateBody
+from app.models.User import UserData
 from sqlmodel import Session, select
-
 
 
 def get_user(user_id: int) -> UserData | None:
@@ -26,7 +23,7 @@ def create_user(user: UserData) -> UserData:
         return user
 
 
-def update_user_patch(user_id: int, user_data: UserData) -> UserData:
+def update_user(user_id: int, user_data: UserData) -> UserData:
     with Session(engine) as session:
         db_user = session.get(UserData, user_id)
         if not db_user:
@@ -44,7 +41,3 @@ def delete_user(user_id: int):
         user = session.get(UserData, user_id)
         session.delete(user)
         session.commit()
-
-
-
-

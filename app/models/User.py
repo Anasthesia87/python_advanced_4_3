@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, EmailStr, HttpUrl
 from sqlmodel import Field, SQLModel
 
@@ -17,25 +16,9 @@ class UserDataCreateBody(BaseModel):
     last_name: str
     avatar: HttpUrl
 
+
 class UserDataUpdateBody(BaseModel):
     email: EmailStr | None = None
     first_name: str | None = None
     last_name: str | None = None
     avatar: HttpUrl | None = None
-
-class UserDataCreateResponse(BaseModel):
-    name: str
-    job: str
-    id: str
-    createdAt: str
-
-
-class UserDataUpdateResponse(BaseModel):
-    name: str
-    job: str
-    updatedAt: str
-
-
-
-
-

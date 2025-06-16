@@ -7,10 +7,6 @@ from sqlmodel import Session, select
 from app.database.engine import engine
 import requests
 from app.models.User import UserData
-from data import users
-
-
-
 
 BASE_URL = "http://127.0.0.1:8002"
 
@@ -123,6 +119,7 @@ def clear_database():
         for user in users:
             session.delete(user)
         session.commit()
+
 
 @pytest.fixture(scope="module")
 def fill_test_data(base_url, clear_database):

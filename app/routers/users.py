@@ -1,10 +1,7 @@
-from typing import Iterable, Type
 from http import HTTPStatus
 from fastapi import HTTPException, APIRouter
 from app.database import users
 from app.models.User import UserData, UserDataCreateBody, UserDataUpdateBody
-
-
 
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
@@ -20,7 +17,6 @@ def get_user(user_id: int) -> UserData:
         raise HTTPException(status_code=HTTPStatus.UNPROCESSABLE_ENTITY, detail="Invalid user id")
     user = users.get_user(user_id)
 
-    # if user is None:
     if not user:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="User not found")
     return user
@@ -28,7 +24,7 @@ def get_user(user_id: int) -> UserData:
 
 @router.get("/", status_code=HTTPStatus.OK)
 def get_users(session: Session = Depends(get_session)):
-    return users.get_users(session)  # <- session передается явно
+    return users.get_users(session)
 
 
 @router.post("/", status_code=HTTPStatus.CREATED)
