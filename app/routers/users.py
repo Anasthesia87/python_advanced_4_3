@@ -1,13 +1,14 @@
-from typing import Iterable
+from typing import Iterable, Type
 from http import HTTPStatus
 from fastapi import HTTPException, APIRouter
 from app.database import users
 from app.models.User import UserData, UserDataCreateBody, UserDataUpdateBody
 
 
+
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
-from app.database.engine import get_session
+from app.database.engine import get_session, engine
 from app.database.users import get_users
 
 router = APIRouter(prefix="/api/users")
@@ -36,12 +37,12 @@ def create_user(user: UserData) -> UserData:
     return users.create_user(user)
 
 
-@router.patch("/{user_id}", status_code=HTTPStatus.OK)
-def update_user(user_id: int, user: UserData) -> UserData:
+@router.patch("/{user_id}", response_model=None)
+def update_user(user_id: int, user_data: UserData):
     if user_id < 1:
-        raise HTTPException(status_code=HTTPStatus.UNPROCESSABLE_ENTITY, detail="Incorrect user")
-    UserUpdate.model_validate(user)
-    return users.update_user(user.model_dump())
+        raise HTTPException(status_code=HTTPStatus.UNPROCESSABLE_ENTITY, detail="Invalide user")
+    UserDataUpdateBody.model_validate(user_data.model_dump())
+    return users.update_user(user_id, user_data)
 
 
 @router.delete("/{user_id}", status_code=HTTPStatus.OK)

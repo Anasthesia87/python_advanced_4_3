@@ -2,7 +2,7 @@
 from typing import Iterable, Type
 from fastapi import HTTPException
 from .engine import engine
-from app.models.User import UserData
+from app.models.User import UserData, UserDataUpdateBody
 from sqlmodel import Session, select
 
 
@@ -25,26 +25,14 @@ def create_user(user: UserData) -> UserData:
         session.refresh(user)
         return user
 
-def update_user_put(user_id: int, user: UserData) -> Type[UserData]:
-    with Session as session:
+
+def update_user_patch(user_id: int, user_data: UserData) -> UserData:
+    with Session(engine) as session:
         db_user = session.get(UserData, user_id)
         if not db_user:
             raise HTTPException(status_code=404, detail="User not found")
-        user_data = user.model_dump(exclude_unset=True)
-        db_user.sqlmodel_update(user_data)
-        session.add(db_user)
-        session.commit()
-        session.refresh(db_user)
-        return db_user
-
-
-def update_user_patch(user_id: int, user: UserData) -> Type[UserData]:
-    with Session as session:
-        db_user = session.get(UserData, user_id)
-        if not db_user:
-            raise HTTPException(status_code=404, detail="User not found")
-        user_data = user.model_dump(exclude_unset=True)
-        db_user.sqlmodel_update(user_data)
+        user = user_data.model_dump(exclude_unset=True)
+        db_user.sqlmodel_update(user)
         session.add(db_user)
         session.commit()
         session.refresh(db_user)
