@@ -47,6 +47,8 @@ def test_api_get_user_after_create_user(base_url):
 
 def test_api_get_list_users_after_create_user(base_url, fill_test_data, clear_database):
     response = requests.get(f"{base_url}/api/users")
+    print(response.text)  # Что на самом деле возвращает сервер?
+    users_list_from_api = response.json()  # Упадёт здесь, если не JSON
     assert response.status_code == 200, f"Не удалось получить список пользователей: {response.text}"
     initial_users = response.json()
 
@@ -62,14 +64,19 @@ def test_api_get_list_users_after_create_user(base_url, fill_test_data, clear_da
 
     response = requests.get(f"{base_url}/api/users")
     users_list_from_api = response.json()
+    print(response.text)
+    print(users_list_from_api)
+    users = users_list_from_api["items"]
+    new_user_found = any(user['id'] == new_user['id'] for user in users)
 
-    new_user_found = any(user['id'] == new_user['id'] for user in users_list_from_api)
+    # new_user_found = any(user['id'] == new_user['id'] for user in users_list_from_api)
     assert new_user_found, "Новый пользователь не найден в списке"
 
     values_equal = all(
         fill_test_data[key] == users_list_from_api[key] for key in fill_test_data if key in users_list_from_api)
     assert values_equal
-    assert len(users_list_from_api) == len(initial_users) + 1
+    # assert len(users_list_from_api) == len(initial_users) + 1
+    assert len(users_list_from_api["items"]) == len(initial_users["items"]) + 1
 
 
 def test_api_update_patch_user_all_data(base_url):

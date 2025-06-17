@@ -1,5 +1,7 @@
 from http import HTTPStatus
-from fastapi import HTTPException, APIRouter
+from fastapi import HTTPException
+from fastapi_pagination import Page
+
 from app.database import users
 from app.models.User import UserData, UserDataCreateBody, UserDataUpdateBody
 
@@ -23,13 +25,13 @@ def get_user(user_id: int) -> UserData:
 
 
 @router.get("/", status_code=HTTPStatus.OK)
-def get_users(session: Session = Depends(get_session)):
-    return users.get_users(session)
+def get_users() -> Page[UserData]:
+    return users.get_users()
 
 
-@router.post("/", status_code=HTTPStatus.CREATED)
+@router.post("/", status_code=201)
 def create_user(user: UserData) -> UserData:
-    UserDataCreateBody.model_validate(user.model_dump())
+    UserDataCreateBody.model_validate(user.model_dump(mode="json"))
     return users.create_user(user)
 
 

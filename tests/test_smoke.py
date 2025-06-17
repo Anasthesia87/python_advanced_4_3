@@ -24,18 +24,19 @@ def test_clear_database(base_url):
 
 @pytest.mark.usefixtures("fill_test_data")
 def test_users(base_url):
-    response = requests.get(f"{base_url}/api/users/")
+    response = requests.get(f"{base_url}/api/users")
     assert response.status_code == HTTPStatus.OK
 
-    user_list = response.json()
+    user_list = response.json()['items']
     for user in user_list:
         UserData.model_validate(user)
 
 
 @pytest.mark.usefixtures("fill_test_data")
 def test_users_no_duplicates(users):
-    users_ids = [user["id"] for user in users]
-    assert len(users_ids) == len(set(users_ids))
+    users_list = users["items"]
+    users_ids = [user["id"] for user in users_list]
+    assert len(users_ids) == len(set(users_ids)), "Найдены дубликаты ID пользователей"
 
 
 def test_user(base_url, fill_test_data):

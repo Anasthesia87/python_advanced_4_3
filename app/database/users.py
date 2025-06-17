@@ -1,4 +1,9 @@
+from typing import Iterable
+
 from fastapi import HTTPException
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlmodel import paginate
+
 from .engine import engine
 from app.models.User import UserData
 from sqlmodel import Session, select
@@ -9,10 +14,10 @@ def get_user(user_id: int) -> UserData | None:
         return session.get(UserData, user_id)
 
 
-def get_users(session: Session):
-    stmt = select(UserData)
-    result = session.exec(stmt)
-    return result.all()
+def get_users() -> Page[UserData]:
+    with Session(engine) as session:
+        statement = select(UserData)
+        return paginate(session, statement)
 
 
 def create_user(user: UserData) -> UserData:
@@ -30,9 +35,11 @@ def update_user(user_id: int, user_data: UserData) -> UserData:
             raise HTTPException(status_code=404, detail="User not found")
         user = user_data.model_dump(exclude_unset=True)
         db_user.sqlmodel_update(user)
+
         session.add(db_user)
         session.commit()
         session.refresh(db_user)
+
         return db_user
 
 
