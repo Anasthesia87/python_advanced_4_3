@@ -18,7 +18,7 @@ from tests.conftest import base_url
     (1, 12),
     (1, 15)
 ])
-def test_api_list_users_pagination_basic_params(base_url: str, test_data_users: list, page: int, size: int):
+def test_api_list_users_pagination_basic_params(base_url: str, fill_test_data, page: int, size: int):
     response = requests.get(f"{base_url}/api/users/?page={page}&size={size}")
     assert response.status_code == HTTPStatus.OK
 
@@ -49,7 +49,7 @@ def test_api_list_users_pagination_basic_params(base_url: str, test_data_users: 
 
 
 @pytest.mark.parametrize("size", [1, 3, 6, 10, 12, 15])
-def test_api_list_users_pagination_pages_count(base_url: str, test_data_users: list, size: int):
+def test_api_list_users_pagination_pages_count(base_url: str, fill_test_data, size: int):
     response = requests.get(f"{base_url}/api/users/?size={size}")
     assert response.status_code == HTTPStatus.OK
 
@@ -61,7 +61,7 @@ def test_api_list_users_pagination_pages_count(base_url: str, test_data_users: l
                "pages"] == expected_pages, f"Количество страниц: ожидается {expected_pages}, получено {paginated_data.pages}"
 
 
-def test_api_list_users_pagination_different_pages(base_url: str, test_data_users: list):
+def test_api_list_users_pagination_different_pages(base_url: str, fill_test_data):
     size = 6
     first_page = 1
     second_page = 2

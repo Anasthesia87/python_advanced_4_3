@@ -5,10 +5,8 @@ from fastapi_pagination import Page
 from app.database import users
 from app.models.User import UserData, UserDataCreateBody, UserDataUpdateBody
 
-from fastapi import APIRouter, Depends
-from sqlmodel import Session
-from app.database.engine import get_session, engine
-from app.database.users import get_users
+from fastapi import APIRouter
+
 
 router = APIRouter(prefix="/api/users")
 
